@@ -1,6 +1,8 @@
 
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { INITIAL_PRODUCTS, INITIAL_ORDERS, MOCK_CUSTOMERS } from '../data/mock';
+import { db } from '../firebase';
+import { collection, addDoc } from 'firebase/firestore';
 
 type Product = {
   id: number;
@@ -90,10 +92,29 @@ export const DataProvider = ({ children }: { children?: ReactNode }) => {
   const clearCart = () => setCart([]);
 
   // Admin Actions
-  const addProduct = (newProduct: any) => {
-    const productWithId = { ...newProduct, id: Date.now(), rating: 0, sales: 0 };
-    setProducts([productWithId, ...products]);
-    showToast("Artifact cataloged");
+  const addProduct = async (newProduct: any) => {
+    try {
+      const docRef = await addDoc(collection(db, "products"), {
+        name: newProduct.name,
+        price: newProduct.price,
+        category: newProduct.category,
+        image: newProduct.image,
+        stock: newProduct.stock,
+        rating: 0,
+        sales: 0,
+        createdAt: new Date()
+      });
+      
+      const productWithId = { ...newProduct, id: docRef.id, rating: 0, sales: 0 };
+      setProducts([productWithId, ...products]);
+      showToast("Artifact cataloged to Firestore");
+    } catch (e) {
+      console.error("Error adding document: ", e);
+      // Fallback to local state if firestore fails (or for immediate UI update)
+      const productWithId = { ...newProduct, id: Date.now(), rating: 0, sales: 0 };
+      setProducts([productWithId, ...products]);
+      showToast("Artifact cataloged (Local)");
+    }
   };
 
   const updateProduct = (updatedProduct: any) => {

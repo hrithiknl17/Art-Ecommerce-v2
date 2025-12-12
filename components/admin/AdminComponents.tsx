@@ -80,6 +80,7 @@ export const AdminProducts = () => {
   const [editingProduct, setEditingProduct] = useState<any>(null);
   const [imageMode, setImageMode] = useState('url');
   const [previewImage, setPreviewImage] = useState('');
+  const [uploading, setUploading] = useState(false);
 
   const handleModalSubmit = (e: any) => {
     e.preventDefault();
@@ -101,12 +102,28 @@ export const AdminProducts = () => {
     setPreviewImage('');
   };
 
-  const handleImageUpload = (e: any) => {
+  const handleImageUpload = async (e: any) => {
     const file = e.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => { setPreviewImage(reader.result as string); };
-      reader.readAsDataURL(file);
+    if (!file) return;
+
+    setUploading(true);
+
+    const formData = new FormData();
+    formData.append("image", file);
+
+    // send to backend
+    try {
+      const res = await fetch("http://localhost:5000/upload", {
+        method: "POST",
+        body: formData,
+      });
+
+      const data = await res.json();
+      setPreviewImage(data.imageUrl);
+      setUploading(false);
+    } catch (error) {
+      console.error("Upload failed", error);
+      setUploading(false);
     }
   };
 
@@ -199,9 +216,17 @@ export const AdminProducts = () => {
                <Input name="imageUrl" required={!previewImage} defaultValue={editingProduct?.image} placeholder="https://..." onChange={(e) => setPreviewImage(e.target.value)} />
              ) : (
                <div className="border-2 border-dashed border-gray-300 rounded-xl p-6 text-center relative">
-                  <input type="file" accept="image/*" className="absolute inset-0 w-full h-full opacity-0 cursor-pointer" onChange={handleImageUpload} required={!previewImage} />
-                  <ImageIcon className="mx-auto h-8 w-8 text-gray-400 mb-2" />
-                  <p className="text-sm text-gray-500">Click to upload</p>
+                  {uploading ? (
+                    <div className="flex flex-col items-center justify-center h-full">
+                      <p className="text-sm text-gray-500">Uploading...</p>
+                    </div>
+                  ) : (
+                    <>
+                      <input type="file" accept="image/*" className="absolute inset-0 w-full h-full opacity-0 cursor-pointer" onChange={handleImageUpload} required={!previewImage} />
+                      <ImageIcon className="mx-auto h-8 w-8 text-gray-400 mb-2" />
+                      <p className="text-sm text-gray-500">Click to upload</p>
+                    </>
+                  )}
                </div>
              )}
              {previewImage && <div className="mt-3 aspect-video rounded-lg overflow-hidden bg-gray-100"><img src={previewImage} alt="Preview" className="w-full h-full object-contain" /></div>}
