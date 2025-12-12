@@ -198,8 +198,10 @@ export const AdminProducts = () => {
            </div>
            <div className="w-full mb-4">
                 <label className="block text-sm font-medium text-gray-700 mb-2 ml-1">Category *</label>
-                <select name="category" required defaultValue={editingProduct?.category || "Electronics"} className="w-full px-4 py-3 bg-gray-100 rounded-lg">
-                   {['Electronics', 'Fashion', 'Home', 'Beauty'].map(c => <option key={c} value={c}>{c}</option>)}
+                <select name="category" required defaultValue={editingProduct?.category || "Clothing"} className="w-full px-4 py-3 bg-gray-100 rounded-lg">
+                   {['Clothing', 'Painting', 'Accessories', 'Decor'].map(c => (
+                      <option key={c} value={c}>{c}</option>
+                   ))}
                 </select>
            </div>
            <div className="mb-4">
