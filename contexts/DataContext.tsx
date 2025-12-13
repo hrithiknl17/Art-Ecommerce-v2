@@ -1,7 +1,8 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+
 import { db } from '../firebase';
 import { 
-  collection, addDoc, doc, deleteDoc, updateDoc, onSnapshot 
+  collection, addDoc, doc, deleteDoc, updateDoc, onSnapshot, getDocs
 } from "firebase/firestore";
 
 type Product = {
@@ -60,16 +61,29 @@ export const DataProvider = ({ children }: { children?: ReactNode }) => {
   // ---------------------------------------------------------
   // 🔥 REAL-TIME FIRESTORE PRODUCT LISTENER
   // ---------------------------------------------------------
+  // Load products from Firestore
   useEffect(() => {
-    const unsub = onSnapshot(collection(db, "products"), (snapshot) => {
-      const list: any[] = [];
-      snapshot.forEach((doc) => {
-        list.push({ id: doc.id, ...doc.data() });
-      });
-      setProducts(list);
-    });
+    const loadProducts = async () => {
+      try {
+        const snapshot = await getDocs(collection(db, "products"));
+        const firestoreProducts = snapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
 
-    return () => unsub();
+        if (firestoreProducts.length > 0) {
+          setProducts(firestoreProducts as Product[]);
+          localStorage.setItem("products", JSON.stringify(firestoreProducts));
+        } else {
+          console.log("No products found in Firestore");
+        }
+
+      } catch (error) {
+        console.error("🔥 Firestore load failed, falling back to local:", error);
+      }
+    };
+
+    loadProducts();
   }, []);
 
   // ---------------------------------------------------------
