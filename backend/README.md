@@ -28,16 +28,27 @@ cd Art-Ecommerce-backend
 npm install
 ```
 
-3. Create a `.env` file in the root directory with your Cloudinary credentials:
+3. Create a `.env` file based on `.env.example`:
+```bash
+cp .env.example .env
+```
+
+4. Edit the `.env` file with your Cloudinary credentials:
 ```env
+PORT=5000
 CLOUDINARY_CLOUD_NAME=your_cloud_name
 CLOUDINARY_API_KEY=your_api_key
 CLOUDINARY_API_SECRET=your_api_secret
 ```
 
+**Important:** Make sure to set up your `.env` file before running the server, as these credentials are required for the application to function properly.
+
 ## Usage
 
 ### Development
+
+**Note:** Ensure your `.env` file is properly configured before starting the server.
+
 
 Start the server:
 ```bash
