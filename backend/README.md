@@ -44,7 +44,7 @@ Start the server:
 npm start
 ```
 
-The server will run on `http://localhost:5000`
+The server will run on `http://localhost:5000` by default (configurable via PORT environment variable)
 
 ### API Endpoints
 
@@ -64,11 +64,12 @@ The server will run on `http://localhost:5000`
 
 ## Environment Variables
 
-| Variable | Description |
-|----------|-------------|
-| `CLOUDINARY_CLOUD_NAME` | Your Cloudinary cloud name |
-| `CLOUDINARY_API_KEY` | Your Cloudinary API key |
-| `CLOUDINARY_API_SECRET` | Your Cloudinary API secret |
+| Variable | Description | Default |
+|----------|-------------|---------|
+| `PORT` | Server port number | `5000` |
+| `CLOUDINARY_CLOUD_NAME` | Your Cloudinary cloud name | - |
+| `CLOUDINARY_API_KEY` | Your Cloudinary API key | - |
+| `CLOUDINARY_API_SECRET` | Your Cloudinary API secret | - |
 
 ## Dependencies
 
