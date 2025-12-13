@@ -113,7 +113,7 @@ export const AdminProducts = () => {
 
     // send to backend
     try {
-      const res = await fetch("http://localhost:5000/upload", {
+      const res = await fetch(import.meta.env.VITE_BACKEND_URL + "/upload", {
         method: "POST",
         body: formData,
       });
