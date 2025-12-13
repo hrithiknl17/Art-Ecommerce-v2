@@ -1,13 +1,21 @@
 {
-  "name": "backend",
+  "name": "art-ecommerce-backend",
   "version": "1.0.0",
-  "description": "",
+  "description": "Backend server for Art Ecommerce platform with Cloudinary image upload",
   "main": "index.js",
+  "type": "module",
   "scripts": {
     "start": "node index.js",
+    "dev": "node index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": [],
+  "keywords": [
+    "art",
+    "ecommerce",
+    "cloudinary",
+    "image-upload",
+    "backend"
+  ],
   "author": "",
   "license": "ISC",
   "dependencies": {
