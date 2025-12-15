@@ -7,7 +7,8 @@ import { useData, formatRupee } from '../contexts/DataContext';
 
 const Shop = () => {
   const { setView, searchQuery, setSearchQuery } = useNavigation();
-  const { products, setSelectedProduct, addToCart, activeCategory, setActiveCategory } = useData();
+  const { products, setSelectedProduct, addToCart } = useData();
+  const [activeCategory, setActiveCategory] = useState('All');
   const [priceLimit, setPriceLimit] = useState(500000);
 
   const filteredProducts = useMemo(() => {
@@ -26,11 +27,6 @@ const Shop = () => {
 
   const categories = ['All', 'Clothing', 'Painting', 'Accessories', 'Decor'];
 
-  const handleCategoryClick = (cat: string) => {
-    setActiveCategory(cat);
-    setSearchQuery('');
-  };
-
   return (
     <div className="bg-[#F8F5F1] min-h-screen pt-16 pb-32">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -47,7 +43,7 @@ const Shop = () => {
                 {categories.map(cat => (
                   <button 
                     key={cat}
-                    onClick={() => handleCategoryClick(cat)}
+                    onClick={() => setActiveCategory(cat)}
                     className={`text-xs font-bold uppercase tracking-widest transition-all ${activeCategory === cat ? 'text-[#1A1A1A] scale-110' : 'text-gray-400 hover:text-[#1A1A1A]'}`}
                   >
                     {cat}
