@@ -7,9 +7,16 @@ import { useAuth } from '../../contexts/AuthContext';
 
 const Navbar = () => {
   const { view, setView, isMenuOpen, setIsMenuOpen, searchQuery, setSearchQuery } = useNavigation();
-  const { cart } = useData();
+  const { cart, setActiveCategory } = useData();
   const { user } = useAuth();
   const [isSearchOpen, setIsSearchOpen] = useState(false);
+
+  const resetAndNavigateShop = () => {
+    setSearchQuery('');
+    setActiveCategory('All');
+    setView('shop');
+    setIsMenuOpen(false);
+  };
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchQuery(e.target.value);
@@ -27,7 +34,7 @@ const Navbar = () => {
               <button onClick={() => setView('home')} className={`text-xs font-bold uppercase tracking-widest hover:text-[#C5A059] transition-colors ${view === 'home' ? 'text-[#C5A059]' : 'text-[#1A1A1A]'}`}>
                 Home
               </button>
-              <button onClick={() => setView('shop')} className={`text-xs font-bold uppercase tracking-widest hover:text-[#C5A059] transition-colors ${view === 'shop' ? 'text-[#C5A059]' : 'text-[#1A1A1A]'}`}>
+              <button onClick={resetAndNavigateShop} className={`text-xs font-bold uppercase tracking-widest hover:text-[#C5A059] transition-colors ${view === 'shop' ? 'text-[#C5A059]' : 'text-[#1A1A1A]'}`}>
                 Catalogue
               </button>
           </div>

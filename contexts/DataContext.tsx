@@ -11,6 +11,7 @@ type Product = {
   price: number;
   category: string;
   image: string;
+  images?: string[];
   rating: number;
   stock: number;
   sales: number;
@@ -24,8 +25,10 @@ type DataContextType = {
   customers: any[];
   cart: CartItem[];
   selectedProduct: Product | null;
+  activeCategory: string;
   toast: { show: boolean; message: string };
   
+  setActiveCategory: (category: string) => void;
   setSelectedProduct: (product: Product | null) => void;
   addToCart: (product: Product) => void;
   removeFromCart: (productId: string) => void;
@@ -55,6 +58,7 @@ export const DataProvider = ({ children }: { children?: ReactNode }) => {
     return saved ? JSON.parse(saved) : [];
   });
 
+  const [activeCategory, setActiveCategory] = useState('All');
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [toast, setToast] = useState({ show: false, message: "" });
 
@@ -207,9 +211,10 @@ export const DataProvider = ({ children }: { children?: ReactNode }) => {
         orders,
         customers,
         cart,
-        selectedProduct,
+        activeCategory,
         toast,
 
+        setActiveCategory,
         setSelectedProduct,
         addToCart,
         removeFromCart,

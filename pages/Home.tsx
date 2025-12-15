@@ -8,7 +8,7 @@ import { useData } from '../contexts/DataContext';
 
 const Home = () => {
   const { setView, setSearchQuery } = useNavigation();
-  const { setSelectedProduct } = useData();
+  const { setSelectedProduct, setActiveCategory } = useData();
   const [currentSlide, setCurrentSlide] = useState(0);
 
   // Carousel Data
@@ -38,10 +38,16 @@ const Home = () => {
   }, []);
 
   const handleGenreClick = (genreName: string) => {
-    setSearchQuery(genreName);
-    setView('shop');
-  };
+  let category = 'All';
+  if (genreName === 'Vintage Clothing') category = 'Clothing';
+  else if (genreName === 'Fine Art') category = 'Painting';
+  else if (genreName === 'Decor & Curios') category = 'Decor';
+  else category = genreName; 
 
+  setActiveCategory(category);
+  setSearchQuery(''); 
+  setView('shop');
+};
   return (
     <>
       {/* Hero Carousel */}
